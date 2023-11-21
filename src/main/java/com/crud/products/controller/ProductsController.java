@@ -1,16 +1,24 @@
 package com.crud.products.controller;
 
+import com.crud.products.dtos.ProductDTO;
+import com.crud.products.model.ProductModel;
+import com.crud.products.repository.ProductRepository;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/products")
 public class ProductsController {
 
-    @GetMapping
-    public ResponseEntity findAll(){
-        return ResponseEntity.ok("Matheus deu certo paiii");
+    @Autowired
+    private ProductRepository productRepository;
+
+    @PostMapping("/products")
+    public ResponseEntity<ProductModel> saveProduct(@RequestBody ProductDTO productDTO){
+        var productModel = new ProductModel();
+        BeanUtils.copyProperties(productModel, productModel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productRepository.save(productModel));
     }
 }
